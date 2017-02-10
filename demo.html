@@ -5,12 +5,16 @@
     <title>Loop by GoodBytes</title>
 </head>
 <body>
+   
+   <button class="btnNotify">yo</button>
+   <div class="js-subscription-json"></div>
+    <div class="js-subscription-details"></div>
     
     <script src="distribution/index.js"></script>
     <script>
         
-        var loop = new MyBundle._Loop;
-        loop.notification();
+        var loop = new GoodBytes.Loop();
+        loop.showNotification();
     
     </script>
 </body>

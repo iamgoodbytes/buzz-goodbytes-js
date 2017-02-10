@@ -14,7 +14,7 @@ gulp.task('bundle', function () {
   }).then(function (bundle) {
     return bundle.write({
       format: 'iife',
-      moduleName: 'MyBundle',
+      moduleName: 'GoodBytes',
       useStrict: false, //for push.js compatibility
       dest: 'distribution/index.js'
     });
