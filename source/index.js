@@ -14,7 +14,7 @@ export class Loop
         this.swRegistration = null;
         
         this.server = "https://loop.goodbytes.be";
-        this.server = "http://loop.goodbytes.local"
+        //this.server = "http://loop.goodbytes.local"
         
         this.setRequestHeaders(options.API_KEY);
         this.setup();
