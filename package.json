@@ -1,6 +1,6 @@
 {
   "name": "loop-goodbytes-js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "JS client for loop.goodbytes.be",
   "main": "distribution/index.js",
   "scripts": {
