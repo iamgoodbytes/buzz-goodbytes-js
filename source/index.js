@@ -12,14 +12,25 @@ export class Loop
         this.pushButton = document.querySelector('.btnNotify');
         this.isSubscribed = false;
         this.swRegistration = null;
+        this.setRequestHeaders(options.API_KEY);
         
         this.server = "https://loop.goodbytes.be";
-        //this.server = "http://loop.goodbytes.local"
         
-        this.setRequestHeaders(options.API_KEY);
+        if(options.development){
+            // only used in active development
+            this.server = "http://loop.goodbytes.local";
+            console.log("Development mode active");
+            return;
+        }
+                
+        
         this.setup();
     }
 
+    setServer(server){
+        // only used during development to change the test server
+        this.server = server;
+    }
     
     urlB64ToUint8Array(base64String) {
         const padding = '='.repeat((4 - base64String.length % 4) % 4);
