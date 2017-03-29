@@ -8,7 +8,7 @@ export class Loop
       // https://github.com/web-push-libs/web-push-php
       // private key: zqFkkwkZaELFUpBzFgUyVxC6ub65Uwp45l0rMeqfXQM
         
-        this.applicationServerPublicKey = 'BAIXDJo1XjYkjfyn5buBI-LSGRvzXTJrl7pcom2S3MneH_2nWSNai1rbNm34Pu2w2Xa5RmMke-bVM9YUsAIY9kU';
+        this.applicationServerPublicKey = 'BG79+VKll7YW6EQLB1V1Yq2qW134m4Dya1ST5TFgeMARbiueUcZ4qU7lnoElfoKSaJ4h8BdfKnnQXY09gBMwnEA=';
         this.pushButton = document.querySelector('.btnNotify');
         this.isSubscribed = false;
         this.swRegistration = null;
