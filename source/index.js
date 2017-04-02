@@ -6,7 +6,6 @@ export class Loop
     constructor(options) {
       // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
       // https://github.com/web-push-libs/web-push-php
-      // private key: zqFkkwkZaELFUpBzFgUyVxC6ub65Uwp45l0rMeqfXQM
         
         this.applicationServerPublicKey = 'BG79+VKll7YW6EQLB1V1Yq2qW134m4Dya1ST5TFgeMARbiueUcZ4qU7lnoElfoKSaJ4h8BdfKnnQXY09gBMwnEA=';
         this.pushButton = document.querySelector('.btnNotify');

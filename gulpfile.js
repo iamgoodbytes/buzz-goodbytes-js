@@ -1,15 +1,17 @@
 var gulp       = require('gulp'),
     nodeResolve = require('rollup-plugin-node-resolve'),
     commonjs    = require('rollup-plugin-commonjs'),
-    rollup = require('rollup').rollup;
-    sourcemaps = require('gulp-sourcemaps');
+    rollup = require('rollup').rollup,
+    sourcemaps = require('gulp-sourcemaps'),
+    babel = require('rollup-plugin-babel');
 
 gulp.task('bundle', function () {
   return rollup({
     entry: 'source/index.js',
     plugins: [
       nodeResolve(),
-      commonjs()
+      commonjs(),
+      babel()
     ]
   }).then(function (bundle) {
     return bundle.write({
