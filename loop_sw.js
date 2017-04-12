@@ -15,17 +15,20 @@ self.addEventListener('push', function(event) {
     const options = {
         body: jsonData.title,
         icon: jsonData.icon,
-        badge: jsonData.icon
+        badge: jsonData.icon,
+        actions: jsonData.actions || []
     };
 
     event.waitUntil(self.registration.showNotification(title, options));
 });
 
 self.addEventListener('notificationclick', function(event) {
+    //https://github.com/cretueusebiu/laravel-web-push-demo/blob/master/public/sw.js
+    
     console.log('[Service Worker] Notification click Received.');
 
     event.notification.close();
-
+    
     event.waitUntil(
         clients.openWindow('https://developers.google.com/web/')
     );
