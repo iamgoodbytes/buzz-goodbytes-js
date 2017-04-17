@@ -15,6 +15,7 @@ export class Loop
         
         this.server = "https://loop.goodbytes.be";
         
+
         if(options.development){
             // only used in active development
             this.server = "http://loop.goodbytes.local";
@@ -177,9 +178,8 @@ export class Loop
     updateSubscriptionOnServer(subscription) {
         // TODO: Send subscription to application server
 
-        const subscriptionJson = document.querySelector('.js-subscription-json');
-        const subscriptionDetails =
-                document.querySelector('.js-subscription-details');
+        //const subscriptionJson = document.querySelector('.js-subscription-json');
+        //const subscriptionDetails = document.querySelector('.js-subscription-details');
 
         if (subscription) {
             
@@ -195,10 +195,10 @@ export class Loop
           });
             
             
-            subscriptionJson.textContent = JSON.stringify(subscription);
-            subscriptionDetails.classList.remove('is-invisible');
+            // subscriptionJson.textContent = JSON.stringify(subscription);
+            // subscriptionDetails.classList.remove('is-invisible');
         } else {
-            subscriptionDetails.classList.add('is-invisible');
+            // subscriptionDetails.classList.add('is-invisible');
         }
     }
     
