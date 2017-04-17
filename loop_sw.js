@@ -11,9 +11,9 @@ self.addEventListener('push', function(event) {
 
     var jsonData = event.data.json();
     
-    const title = jsonData.body;
+    const title = jsonData.title;
     const options = {
-        body: jsonData.title,
+        body: jsonData.body,
         icon: jsonData.icon,
         badge: jsonData.icon,
         actions: jsonData.actions || []
