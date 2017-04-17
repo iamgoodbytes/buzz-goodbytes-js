@@ -3,20 +3,32 @@ import axios from 'axios/dist/axios';
 
 export class Loop
 {
-    constructor(options) {
+    constructor(p_options) {
       // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
       // https://github.com/web-push-libs/web-push-php
         
         this.applicationServerPublicKey = 'BG79+VKll7YW6EQLB1V1Yq2qW134m4Dya1ST5TFgeMARbiueUcZ4qU7lnoElfoKSaJ4h8BdfKnnQXY09gBMwnEA=';
-        this.pushButton = document.querySelector('.btnNotify');
         this.isSubscribed = false;
         this.swRegistration = null;
-        this.setRequestHeaders(options.API_KEY);
-        
+        this.setRequestHeaders(p_options.API_KEY);
         this.server = "https://loop.goodbytes.be";
-        
 
-        if(options.development){
+        console.log(p_options);
+        this.options = p_options;
+
+        // show a push button or not
+        this.options.button = p_options.button || {}; 
+        this.options.button.enable = p_options.button.enable || false;
+        this.options.button.target = p_options.button.target || null;
+        this.options.button.textSubscribe = p_options.button.textSubscribe || "Receive Notifications";
+        this.options.button.textUnsubscribe = p_options.button.textUnsubscribe || "Block Notifications";
+
+        if( this.options.button.target !== null && this.options.button.enable == true ){
+            this.pushButton = document.querySelector('.btnNotify');
+        }
+
+        
+        if(this.options.development){
             // only used in active development
             this.server = "http://loop.goodbytes.local";
             console.log("Development mode active");
@@ -25,6 +37,30 @@ export class Loop
                 
         
         this.setup();
+    }
+
+    createButton(){
+        // create a push button in the target element specified and return that instance
+        let button = document.createElement("a");
+        button.setAttribute("id", "loopGoodBytesJsButton");
+        // inject the stylesheet for this bad boy
+        var link = document.createElement("link");
+        if(this.options.testCss == true) {
+            link.href = "css/Loop.css";    
+        }
+        else {
+            link.href = "https://loop.goodbytes.be/sdks/Loop.css";
+        }
+        link.type = "text/css";
+        link.rel = "stylesheet";
+        document.getElementsByTagName("head")[0].appendChild(link);
+
+        console.log("hier: " + this.options.button);
+
+        document.querySelector(this.options.button.target).appendChild(button);
+        this.pushButton = button;
+
+        this.initialiseUI();
     }
 
     setServer(server){
@@ -67,7 +103,8 @@ export class Loop
                     console.log('Service Worker is registered', swReg);
 
                     that.swRegistration = swReg;
-                    that.initialiseUI();
+                    that.createButton();
+                    
                 })
                 .catch(function(error) {
                     console.error('Service Worker Error', error);
@@ -165,9 +202,9 @@ export class Loop
 
 
         if (this.isSubscribed) {
-            this.pushButton.textContent = 'Disable Push Messaging';
+            this.pushButton.textContent = this.options.button.textSubscribe;
         } else {
-            this.pushButton.textContent = 'Enable Push Messaging';
+            this.pushButton.textContent = this.options.button.textUnsubscribe;
         }
 
         this.pushButton.disabled = false;

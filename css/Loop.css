@@ -1,0 +1,15 @@
+#loopGoodBytesJsButton
+{
+    font-family: Helvetica, Arial, sans-serif;
+    display: inline-block;
+    padding: 0.8em 1em;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin: 1em;
+    border-radius: 5px;
+    text-decoration: none;
+    background-color: #0C22D1;
+    color: white;
+    font-size: 1em;
+    cursor: pointer;
+}
