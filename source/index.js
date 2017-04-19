@@ -17,8 +17,8 @@ export class Loop
         this.options.button = p_options.button || {}; 
         this.options.button.enable = p_options.button.enable || false;
         this.options.button.target = p_options.button.target || null;
-        this.options.button.textSubscribe = p_options.button.textSubscribe || "Receive Notifications";
-        this.options.button.textUnsubscribe = p_options.button.textUnsubscribe || "Block Notifications";
+        this.options.button.textSubscribe = p_options.button.textSubscribe || "Not Receiving Notifications";
+        this.options.button.textUnsubscribe = p_options.button.textUnsubscribe || "Receiving Notifications";
         this.options.button.textBlocked = p_options.button.textBlocked || "Notifications are blocked";
 
         // ask to subscribe to notifications automatically by default
@@ -103,7 +103,7 @@ export class Loop
         spanIcon.setAttribute("id", "loopGoodBytesJsButtonIcon");
 
         let spanText = document.createElement("span");
-        spanText.setAttribute("id", "loopGoodBytesJsText");
+        spanText.setAttribute("id", "loopGoodBytesJsButtonText");
 
         button.appendChild(spanIcon);
         button.appendChild(spanText);
@@ -212,15 +212,17 @@ export class Loop
         
         if (Notification.permission === 'denied') {
             this.pushButtonText.textContent = this.options.button.textBlocked;
+            this.pushButton.setAttribute("class", "loopGoodBytesJsButtonBlocked");
             this.updateSubscriptionOnServer(null);
             return;
         }
 
-
         if (this.isSubscribed) {
             this.pushButtonText.textContent = this.options.button.textUnsubscribe;
+            this.pushButton.setAttribute("class", "loopGoodBytesJsButtonSubscribed");
         } else {
             this.pushButtonText.textContent = this.options.button.textSubscribe;
+            this.pushButton.setAttribute("class", "loopGoodBytesJsButtonUnsubscribed");
         }
     }
 
@@ -233,6 +235,8 @@ export class Loop
         //const subscriptionDetails = document.querySelector('.js-subscription-details');
 
         if (subscription) {
+
+          
             
           // sync the subscription with the server    
           axios.post(this.server + '/api/v1/subscriptions/sync', {

@@ -2,7 +2,7 @@
 {
     font-family: Helvetica, Arial, sans-serif;
     display: inline-block;
-    padding: 0.8em 1em;
+    padding: 0.75em 0.85em;
     text-transform: uppercase;
     font-weight: bold;
     margin: 1em;
@@ -12,4 +12,86 @@
     color: white;
     font-size: 1em;
     cursor: pointer;
+    display: table;
+    transition: all .2s ease;
+}
+
+#loopGoodBytesJsButton:active, #loopGoodBytesJsButton:focus
+{
+    position: relative;
+    top: 2px;
+}
+
+#loopGoodBytesJsButtonText
+{
+   padding-left: 0.5em;
+   display: table-cell;
+   vertical-align: middle;
+}
+
+#loopGoodBytesJsButtonIcon
+{
+    position: relative;
+    height: 30px;
+    width: 30px;
+    display: inline-block;
+    background-color: white;
+    border-radius: 30px;
+
+    display: table-cell;
+    vertical-align: middle;
+
+    transition: all .2s ease;
+}
+
+.loopGoodBytesJsButtonUnsubscribed #loopGoodBytesJsButtonIcon
+{
+    background: #FF0098;
+}
+
+.loopGoodBytesJsButtonSubscribed #loopGoodBytesJsButtonIcon
+{
+    background:#2ecc71;
+}
+
+#loopGoodBytesJsButtonIcon::before, #loopGoodBytesJsButtonIcon::after{
+  background: white;
+  content:'';
+  display:block;
+  position:absolute;
+  width:5px;
+  transition: all .2s ease;
+}
+
+#loopGoodBytesJsButtonIcon::before{
+  height:18px;
+  left:12px;
+  top:6px;
+  -webkit-transform:rotate(-45deg);
+  transform:rotate(-45deg);
+}
+
+#loopGoodBytesJsButtonIcon::after{
+  height:18px;
+  right:13px;
+  top:6px;
+  -webkit-transform:rotate(45deg);
+  transform:rotate(45deg);
+}
+
+.loopGoodBytesJsButtonSubscribed #loopGoodBytesJsButtonIcon::before
+{
+    height: 12px;
+    left: 9px;
+    top: 11px;
+    -webkit-transform:rotate(-47deg);
+    transform:rotate(-47deg);
+}
+
+.loopGoodBytesJsButtonSubscribed #loopGoodBytesJsButtonIcon::after{
+  height: 15px;
+  right: 9px;
+  top: 8px;
+  -webkit-transform:rotate(43deg);
+  transform:rotate(43deg);
 }
