@@ -95,8 +95,19 @@ export class Loop
     }
     
     createButton(){
+        var that = this;
+
         // create a push button in the target element specified and return that instance
         let button = document.createElement("a");
+        let spanIcon = document.createElement("span");
+        spanIcon.setAttribute("id", "loopGoodBytesJsButtonIcon");
+
+        let spanText = document.createElement("span");
+        spanText.setAttribute("id", "loopGoodBytesJsText");
+
+        button.appendChild(spanIcon);
+        button.appendChild(spanText);
+
         button.setAttribute("id", "loopGoodBytesJsButton");
         // inject the stylesheet for this bad boy
         var link = document.createElement("link");
@@ -110,17 +121,16 @@ export class Loop
         link.rel = "stylesheet";
         document.getElementsByTagName("head")[0].appendChild(link);
 
-        console.log("hier: " + this.options.button);
-
         document.querySelector(this.options.button.target).appendChild(button);
         this.pushButton = button;
-
+        this.pushButtonIcon = spanIcon;
+        this.pushButtonText = spanText;
+        
         this.pushButton.addEventListener('click', function() {
-            this.pushButton.disabled = true;
-            if (this.isSubscribed) {
-                this.unsubscribeUser();
+            if (that.isSubscribed) {
+                that.unsubscribeUser();
             } else {
-                this.subscribeUser();
+                that.subscribeUser();
             }
         });
 
@@ -201,20 +211,17 @@ export class Loop
     updateBtn() {
         
         if (Notification.permission === 'denied') {
-            this.pushButton.textContent = this.options.button.textBlocked;
-            this.pushButton.disabled = true;
+            this.pushButtonText.textContent = this.options.button.textBlocked;
             this.updateSubscriptionOnServer(null);
             return;
         }
 
 
         if (this.isSubscribed) {
-            this.pushButton.textContent = this.options.button.textUnsubscribe;
+            this.pushButtonText.textContent = this.options.button.textUnsubscribe;
         } else {
-            this.pushButton.textContent = this.options.button.textSubscribe;
+            this.pushButtonText.textContent = this.options.button.textSubscribe;
         }
-
-        this.pushButton.disabled = false;
     }
 
 
