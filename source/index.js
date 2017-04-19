@@ -22,7 +22,7 @@ export class Loop
         this.options.button.textBlocked = p_options.button.textBlocked || "Notifications are blocked";
 
         // ask to subscribe to notifications automatically by default
-        this.options.autosubscribe = p_options.autoSubscribe || true;
+        this.options.autoSubscribe = p_options.autoSubscribe || true;
         
         // load all necessary setup stuff
         this.setup();
@@ -95,6 +95,8 @@ export class Loop
     }
     
     createButton(){
+        console.log("Creating button");
+
         var that = this;
 
         // create a push button in the target element specified and return that instance
@@ -240,7 +242,7 @@ export class Loop
           // sync the subscription with the server    
           axios.post(this.server + '/api/v1/subscriptions/sync', {
             subscription: subscription,
-            segments: that.options.segments || ""
+            segments: JSON.stringify(that.options.segments) || ""
           })
           .then(function (response) {
             console.log(response);
