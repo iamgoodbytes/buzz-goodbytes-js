@@ -239,7 +239,7 @@ export class Loop
         if (subscription) {
           // sync the subscription with the server    
           axios.post(this.server + '/api/v1/subscriptions/sync', {
-            subscription: subscription, 
+            subscription: subscription,
             segments: that.options.segments || ""
           })
           .then(function (response) {
