@@ -229,18 +229,18 @@ export class Loop
 
 
     updateSubscriptionOnServer(subscription) {
+        var that = this;
+
         // TODO: Send subscription to application server
 
         //const subscriptionJson = document.querySelector('.js-subscription-json');
         //const subscriptionDetails = document.querySelector('.js-subscription-details');
 
         if (subscription) {
-
-          
-            
           // sync the subscription with the server    
           axios.post(this.server + '/api/v1/subscriptions/sync', {
-            subscription: subscription
+            subscription: subscription, 
+            segments: that.options.segments || ""
           })
           .then(function (response) {
             console.log(response);
