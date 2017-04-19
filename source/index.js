@@ -10,10 +10,7 @@ export class Loop
         this.applicationServerPublicKey = 'BG79+VKll7YW6EQLB1V1Yq2qW134m4Dya1ST5TFgeMARbiueUcZ4qU7lnoElfoKSaJ4h8BdfKnnQXY09gBMwnEA=';
         this.isSubscribed = false;
         this.swRegistration = null;
-        this.setRequestHeaders(p_options.API_KEY);
-        this.server = "https://loop.goodbytes.be";
-
-        console.log(p_options);
+        
         this.options = p_options;
 
         // show a push button or not
@@ -22,23 +19,81 @@ export class Loop
         this.options.button.target = p_options.button.target || null;
         this.options.button.textSubscribe = p_options.button.textSubscribe || "Receive Notifications";
         this.options.button.textUnsubscribe = p_options.button.textUnsubscribe || "Block Notifications";
+        this.options.button.textBlocked = p_options.button.textBlocked || "Notifications are blocked";
 
-        if( this.options.button.target !== null && this.options.button.enable == true ){
-            this.pushButton = document.querySelector('.btnNotify');
-        }
-
+        // ask to subscribe to notifications automatically by default
+        this.options.autosubscribe = p_options.autoSubscribe || true;
         
-        if(this.options.development){
-            // only used in active development
-            this.server = "http://loop.goodbytes.local";
-            console.log("Development mode active");
-            return;
-        }
-                
-        
+        // load all necessary setup stuff
         this.setup();
     }
 
+    setServer(){
+        console.log("Setting server.");
+        // only used during development to change the test server
+        if(this.options.development){
+            // only used in active development
+            this.server = "http://loop.goodbytes.local";
+            console.log("Development server set.");
+        }
+        else
+        {
+            this.server = "https://loop.goodbytes.be";
+        }
+    }
+    
+    urlB64ToUint8Array(base64String) {
+        const padding = '='.repeat((4 - base64String.length % 4) % 4);
+        const base64 = (base64String + padding)
+                .replace(/\-/g, '+')
+                .replace(/_/g, '/');
+
+        const rawData = window.atob(base64);
+        const outputArray = new Uint8Array(rawData.length);
+
+        for (let i = 0; i < rawData.length; ++i) {
+            outputArray[i] = rawData.charCodeAt(i);
+        }
+        return outputArray;
+    }
+
+    setRequestHeaders(API_KEY) {
+        console.log("Setting API key");
+        axios.defaults.headers.common = {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Authorization' : 'Bearer ' + API_KEY
+        };
+    }
+    
+    // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
+    
+    setup(){
+        this.setRequestHeaders(this.options.API_KEY);
+        this.setServer();
+
+        var that = this; // otherwise we will lose our local class scope
+        
+        if ('serviceWorker' in navigator && 'PushManager' in window) {
+        console.log('Service Worker and Push is supported');
+
+        navigator.serviceWorker.register('/loop_sw.js')
+                .then(function(swReg) {
+                    console.log('Service Worker is registered', swReg);
+
+                    that.swRegistration = swReg;
+                    
+                    that.createButton();
+                    
+                })
+                .catch(function(error) {
+                    console.error('Service Worker Error', error);
+                });
+        } else {
+            console.warn('Push messaging is not supported');
+            //this.pushButton.textContent = 'Push Not Supported';
+        }
+    }
+    
     createButton(){
         // create a push button in the target element specified and return that instance
         let button = document.createElement("a");
@@ -60,75 +115,22 @@ export class Loop
         document.querySelector(this.options.button.target).appendChild(button);
         this.pushButton = button;
 
-        this.initialiseUI();
-    }
-
-    setServer(server){
-        // only used during development to change the test server
-        this.server = server;
-    }
-    
-    urlB64ToUint8Array(base64String) {
-        const padding = '='.repeat((4 - base64String.length % 4) % 4);
-        const base64 = (base64String + padding)
-                .replace(/\-/g, '+')
-                .replace(/_/g, '/');
-
-        const rawData = window.atob(base64);
-        const outputArray = new Uint8Array(rawData.length);
-
-        for (let i = 0; i < rawData.length; ++i) {
-            outputArray[i] = rawData.charCodeAt(i);
-        }
-        return outputArray;
-    }
-
-    setRequestHeaders(API_KEY) {
-        axios.defaults.headers.common = {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Authorization' : 'Bearer ' + API_KEY
-        };
-    }
-    
-    // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
-    
-    setup(){
-        var that = this; // otherwise we will lose our local class scope
-        
-        if ('serviceWorker' in navigator && 'PushManager' in window) {
-        console.log('Service Worker and Push is supported');
-
-        navigator.serviceWorker.register('/loop_sw.js')
-                .then(function(swReg) {
-                    console.log('Service Worker is registered', swReg);
-
-                    that.swRegistration = swReg;
-                    that.createButton();
-                    
-                })
-                .catch(function(error) {
-                    console.error('Service Worker Error', error);
-                });
-        } else {
-            console.warn('Push messaging is not supported');
-            //this.pushButton.textContent = 'Push Not Supported';
-        }
-    }
-    
-
-
-    initialiseUI() {
-        var that = this;
-        
         this.pushButton.addEventListener('click', function() {
-            that.pushButton.disabled = true;
-            if (that.isSubscribed) {
-                that.unsubscribeUser();
+            this.pushButton.disabled = true;
+            if (this.isSubscribed) {
+                this.unsubscribeUser();
             } else {
-                that.subscribeUser();
+                this.subscribeUser();
             }
         });
 
+        this.initialiseUI();
+    }
+
+    initialiseUI() {
+        // store local this scope in that
+        var that = this;
+        
         // Set the initial subscription value
         this.swRegistration.pushManager.getSubscription()
                 .then(function(subscription) {
@@ -140,6 +142,11 @@ export class Loop
                         console.log('User IS subscribed.');
                     } else {
                         console.log('User is NOT subscribed.');
+
+                        // when autoSubscribe is enabled, try so subscribe our user
+                        if( that.options.autoSubscribe == true ){
+                            that.subscribeUser();
+                        }
                     }
 
                     that.updateBtn();
@@ -194,7 +201,7 @@ export class Loop
     updateBtn() {
         
         if (Notification.permission === 'denied') {
-            this.pushButton.textContent = 'Push Messaging Blocked.';
+            this.pushButton.textContent = this.options.button.textBlocked;
             this.pushButton.disabled = true;
             this.updateSubscriptionOnServer(null);
             return;
@@ -202,9 +209,9 @@ export class Loop
 
 
         if (this.isSubscribed) {
-            this.pushButton.textContent = this.options.button.textSubscribe;
-        } else {
             this.pushButton.textContent = this.options.button.textUnsubscribe;
+        } else {
+            this.pushButton.textContent = this.options.button.textSubscribe;
         }
 
         this.pushButton.disabled = false;
@@ -244,7 +251,7 @@ export class Loop
         Show a new notification
     */
     showNotification() {
-        
+        // this is only used for demo purposes
         Push.create("Hello world!", {
             body: "How's it hangin'?",
             icon: 'icon.png',
