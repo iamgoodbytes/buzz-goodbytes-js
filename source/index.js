@@ -24,6 +24,9 @@ export class Loop
         // ask to subscribe to notifications automatically by default
         this.options.autoSubscribe = p_options.autoSubscribe || true;
         
+        // debug settings 
+        this.options.debug = p_options.debug || false;
+        
         // load all necessary setup stuff
         this.setup();
     }
@@ -95,7 +98,13 @@ export class Loop
     }
     
     createButton(){
-        console.log("Creating button");
+        if(this.options.debug == true){
+            console.info("Creating a button for you.");
+            
+            if( document.querySelector(this.options.button.target) == undefined){
+                console.warn("We can't add a button if you don't set a 'target' element for it. Are you sure the target element was set and exists in your HTML?");
+            }
+        }
 
         var that = this;
 
