@@ -15,7 +15,7 @@ self.addEventListener('push', function(event) {
     const options = {
         body: jsonData.body,
         icon: jsonData.icon,
-        badge: jsonData.icon,
+        badge: jsonData.icon || "https://loop.goodbytes.be/images/sample_push_icon.png",
         tag: 'goodbytes-push', // this re-uses an existing notification
         actions: jsonData.actions || []
     };
