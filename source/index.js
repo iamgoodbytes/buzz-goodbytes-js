@@ -27,6 +27,10 @@ export class Loop
         // debug settings 
         this.options.debug = p_options.debug || false;
         
+        // set authorization options
+        this.options.API_KEY = p_options.API_KEY || "";
+        this.options.domainId = p_options.domainId || "";
+        
         // load all necessary setup stuff
         this.setup();
     }
@@ -60,18 +64,19 @@ export class Loop
         return outputArray;
     }
 
-    setRequestHeaders(API_KEY) {
+    setRequestHeaders(API_KEY, domainId) {
         console.log("Setting API key");
         axios.defaults.headers.common = {
             'X-Requested-With': 'XMLHttpRequest',
-            'Authorization' : 'Bearer ' + API_KEY
+            'Authorization' : 'Bearer ' + API_KEY,
+            'DomainId': domainId
         };
     }
     
     // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
     
     setup(){
-        this.setRequestHeaders(this.options.API_KEY);
+        this.setRequestHeaders(this.options.API_KEY, this.options.domainId);
         this.setServer();
 
         var that = this; // otherwise we will lose our local class scope
