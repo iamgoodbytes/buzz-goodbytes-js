@@ -27,6 +27,7 @@ self.addEventListener('notificationclick', function(event) {
     //https://github.com/cretueusebiu/laravel-web-push-demo/blob/master/public/sw.js
     
     console.log('[Service Worker] Notification click Received.');
+    console.log(event);
 
     event.notification.close();
     

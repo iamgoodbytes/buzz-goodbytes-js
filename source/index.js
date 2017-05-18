@@ -256,7 +256,7 @@ export class Loop
           // sync the subscription with the server    
           axios.post(this.server + '/api/v1/subscriptions/sync', {
             subscription: subscription,
-            segments: JSON.stringify(that.options.segments) || "",
+            segments: that.options.segments || "",
             domainId: that.options.domainId
           })
           .then(function (response) {
