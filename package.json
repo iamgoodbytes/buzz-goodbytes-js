@@ -1,7 +1,7 @@
 {
-  "name": "loop-goodbytes-js",
+  "name": "buzz-goodbytes-js",
   "version": "1.0.20",
-  "description": "JS client for loop.goodbytes.be",
+  "description": "JS client for Web Push Notification app buzz.goodbytes.be",
   "main": "distribution/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

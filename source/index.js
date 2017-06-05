@@ -1,7 +1,7 @@
 import Push from 'push.js';
 import axios from 'axios/dist/axios';
 
-export class Loop
+export class Buzz
 {
     constructor(p_options) {
       // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
@@ -40,12 +40,12 @@ export class Loop
         // only used during development to change the test server
         if(this.options.development){
             // only used in active development
-            this.server = "http://loop.goodbytes.local";
+            this.server = "http://buzz.goodbytes.local";
             console.log("Development server set.");
         }
         else
         {
-            this.server = "https://loop.goodbytes.be";
+            this.server = "https://buzz.goodbytes.be";
         }
     }
     
@@ -84,7 +84,7 @@ export class Loop
         if ('serviceWorker' in navigator && 'PushManager' in window) {
         console.log('Service Worker and Push is supported');
 
-        navigator.serviceWorker.register('/loop_sw.js')
+        navigator.serviceWorker.register('/sw.js')
                 .then(function(swReg) {
                     console.log('Service Worker is registered', swReg);
 
@@ -116,22 +116,22 @@ export class Loop
         // create a push button in the target element specified and return that instance
         let button = document.createElement("a");
         let spanIcon = document.createElement("span");
-        spanIcon.setAttribute("id", "loopGoodBytesJsButtonIcon");
+        spanIcon.setAttribute("id", "buzzGoodBytesJsButtonIcon");
 
         let spanText = document.createElement("span");
-        spanText.setAttribute("id", "loopGoodBytesJsButtonText");
+        spanText.setAttribute("id", "buzzGoodBytesJsButtonText");
 
         button.appendChild(spanIcon);
         button.appendChild(spanText);
 
-        button.setAttribute("id", "loopGoodBytesJsButton");
+        button.setAttribute("id", "buzzGoodBytesJsButton");
         // inject the stylesheet for this bad boy
         var link = document.createElement("link");
         if(this.options.testCss == true) {
-            link.href = "css/Loop.css";    
+            link.href = "css/Buzz.css";    
         }
         else {
-            link.href = "https://loop.goodbytes.be/sdks/Loop.css";
+            link.href = "https://buzz.goodbytes.be/sdks/Buzz.css";
         }
         link.type = "text/css";
         link.rel = "stylesheet";
@@ -228,17 +228,17 @@ export class Loop
         
         if (Notification.permission === 'denied') {
             this.pushButtonText.textContent = this.options.button.textBlocked;
-            this.pushButton.setAttribute("class", "loopGoodBytesJsButtonBlocked");
+            this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonBlocked");
             this.updateSubscriptionOnServer(null);
             return;
         }
 
         if (this.isSubscribed) {
             this.pushButtonText.textContent = this.options.button.textUnsubscribe;
-            this.pushButton.setAttribute("class", "loopGoodBytesJsButtonSubscribed");
+            this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonSubscribed");
         } else {
             this.pushButtonText.textContent = this.options.button.textSubscribe;
-            this.pushButton.setAttribute("class", "loopGoodBytesJsButtonUnsubscribed");
+            this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonUnsubscribed");
         }
     }
 

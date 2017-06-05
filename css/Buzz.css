@@ -1,4 +1,4 @@
-#loopGoodBytesJsButton
+#buzzGoodBytesJsButton
 {
     font-family: Helvetica, Arial, sans-serif;
     display: inline-block;
@@ -16,20 +16,20 @@
     transition: top .2s ease;
 }
 
-#loopGoodBytesJsButton:active, #loopGoodBytesJsButton:focus
+#buzzGoodBytesJsButton:active, #buzzGoodBytesJsButton:focus
 {
     position: relative;
     top: 2px;
 }
 
-#loopGoodBytesJsButtonText
+#buzzGoodBytesJsButtonText
 {
    padding-left: 0.5em;
    display: table-cell;
    vertical-align: middle;
 }
 
-#loopGoodBytesJsButtonIcon
+#buzzGoodBytesJsButtonIcon
 {
     position: relative;
     height: 30px;
@@ -44,17 +44,17 @@
     transition: all .2s ease;
 }
 
-.loopGoodBytesJsButtonUnsubscribed #loopGoodBytesJsButtonIcon
+.buzzGoodBytesJsButtonUnsubscribed #buzzGoodBytesJsButtonIcon
 {
     background: #FF0098;
 }
 
-.loopGoodBytesJsButtonSubscribed #loopGoodBytesJsButtonIcon
+.buzzGoodBytesJsButtonSubscribed #buzzGoodBytesJsButtonIcon
 {
     background:#2ecc71;
 }
 
-#loopGoodBytesJsButtonIcon::before, #loopGoodBytesJsButtonIcon::after{
+#buzzGoodBytesJsButtonIcon::before, #buzzGoodBytesJsButtonIcon::after{
   background: white;
   content:'';
   display:block;
@@ -63,7 +63,7 @@
   transition: all .2s ease;
 }
 
-#loopGoodBytesJsButtonIcon::before{
+#buzzGoodBytesJsButtonIcon::before{
   height:18px;
   left:12px;
   top:6px;
@@ -71,7 +71,7 @@
   transform:rotate(-45deg);
 }
 
-#loopGoodBytesJsButtonIcon::after{
+#buzzGoodBytesJsButtonIcon::after{
   height:18px;
   right:13px;
   top:6px;
@@ -79,7 +79,7 @@
   transform:rotate(45deg);
 }
 
-.loopGoodBytesJsButtonSubscribed #loopGoodBytesJsButtonIcon::before
+.buzzGoodBytesJsButtonSubscribed #buzzGoodBytesJsButtonIcon::before
 {
     height: 12px;
     left: 9px;
@@ -88,7 +88,7 @@
     transform:rotate(-47deg);
 }
 
-.loopGoodBytesJsButtonSubscribed #loopGoodBytesJsButtonIcon::after{
+.buzzGoodBytesJsButtonSubscribed #buzzGoodBytesJsButtonIcon::after{
   height: 15px;
   right: 9px;
   top: 8px;
