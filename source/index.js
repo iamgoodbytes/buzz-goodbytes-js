@@ -1,12 +1,11 @@
-import Push from 'push.js';
 import axios from 'axios/dist/axios';
 
 export class Buzz
 {
     constructor(p_options) {
+        
       // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
       // https://github.com/web-push-libs/web-push-php
-        
         this.applicationServerPublicKey = 'BG79+VKll7YW6EQLB1V1Yq2qW134m4Dya1ST5TFgeMARbiueUcZ4qU7lnoElfoKSaJ4h8BdfKnnQXY09gBMwnEA=';
         this.isSubscribed = false;
         this.swRegistration = null;
@@ -22,7 +21,7 @@ export class Buzz
         this.options.button.textBlocked = p_options.button.textBlocked || "Notifications are blocked";
 
         // ask to subscribe to notifications automatically by default
-        this.options.autoSubscribe = p_options.autoSubscribe || true;
+        this.options.autoSubscribe = p_options.autoSubscribe == false ? false : true;
         
         // debug settings 
         this.options.debug = p_options.debug || false;
@@ -34,7 +33,7 @@ export class Buzz
         // load all necessary setup stuff
         this.setup();
     }
-
+    
     setServer(){
         console.log("Setting server.");
         // only used during development to change the test server
@@ -76,6 +75,11 @@ export class Buzz
     // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
     
     setup(){
+        if( this.options.debug ) {
+            console.info("We are initiating setup with the following options: ");
+            console.info(this.options);
+        }
+        
         this.setRequestHeaders(this.options.API_KEY, this.options.domainId);
         this.setServer();
 
@@ -90,8 +94,15 @@ export class Buzz
 
                     that.swRegistration = swReg;
                     
-                    that.createButton();
-                    
+                    // only create a button when needed
+                    if( that.options.button.enable ){
+                        that.createButton();
+                    }
+            
+                    // only trigger autosubscribing when needed (when autosubscribe is set or when we need to check a previous subscription e.g. set by a previous button action)
+                    if( that.options.autoSubscribe || Notification.permission != 'default' ){
+                        that.initialiseUI();
+                    }    
                 })
                 .catch(function(error) {
                     console.error('Service Worker Error', error);
@@ -128,6 +139,7 @@ export class Buzz
         // inject the stylesheet for this bad boy
         var link = document.createElement("link");
         if(this.options.testCss == true) {
+            console.info("Test CSS is loading");
             link.href = "css/Buzz.css";    
         }
         else {
@@ -150,10 +162,16 @@ export class Buzz
             }
         });
 
-        this.initialiseUI();
+        this.updateBtn();
+        
     }
 
     initialiseUI() {
+        
+        if( this.options.debug ) {
+            console.info("Initialising notification grabbing.");
+        }
+        
         // store local this scope in that
         var that = this;
         
@@ -226,20 +244,26 @@ export class Buzz
 
     updateBtn() {
         
-        if (Notification.permission === 'denied') {
-            this.pushButtonText.textContent = this.options.button.textBlocked;
-            this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonBlocked");
-            this.updateSubscriptionOnServer(null);
-            return;
-        }
+        // only update the button when we have one
+        if( this.options.button.enable ) {
+            
+            if (Notification.permission === 'denied') {
+                this.pushButtonText.textContent = this.options.button.textBlocked;
+                this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonBlocked");
+                this.updateSubscriptionOnServer(null);
+                return;
+            }
 
-        if (this.isSubscribed) {
-            this.pushButtonText.textContent = this.options.button.textUnsubscribe;
-            this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonSubscribed");
-        } else {
-            this.pushButtonText.textContent = this.options.button.textSubscribe;
-            this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonUnsubscribed");
+            if (this.isSubscribed) {
+                this.pushButtonText.textContent = this.options.button.textUnsubscribe;
+                this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonSubscribed");
+            } else {
+                this.pushButtonText.textContent = this.options.button.textSubscribe;
+                this.pushButton.setAttribute("class", "buzzGoodBytesJsButtonUnsubscribed");
+            }
         }
+        
+        
     }
 
 
@@ -275,19 +299,4 @@ export class Buzz
     }
     
 
-    /*
-        Show a new notification
-    */
-    showNotification() {
-        // this is only used for demo purposes
-        Push.create("Hello world!", {
-            body: "How's it hangin'?",
-            icon: 'icon.png',
-            timeout: 4000,
-            onClick: function () {
-                window.focus();
-                this.close();
-            }
-        });
-    }
 }
