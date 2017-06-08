@@ -44,7 +44,7 @@ export class Buzz
         }
         else
         {
-            this.server = "https://buzz.goodbytes.be";
+            this.server = "https://buzzapp.rocks";
         }
     }
     
@@ -143,7 +143,7 @@ export class Buzz
             link.href = "css/Buzz.css";    
         }
         else {
-            link.href = "https://buzz.goodbytes.be/sdks/Buzz.css";
+            link.href = "https://buzzapp.rocks/sdks/Buzz.css";
         }
         link.type = "text/css";
         link.rel = "stylesheet";
