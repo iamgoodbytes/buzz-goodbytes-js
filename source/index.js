@@ -4,11 +4,9 @@ export class Buzz
 {
     constructor(p_options) {
         
-      // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
-      // https://github.com/web-push-libs/web-push-php
-        this.applicationServerPublicKey = 'BG79+VKll7YW6EQLB1V1Yq2qW134m4Dya1ST5TFgeMARbiueUcZ4qU7lnoElfoKSaJ4h8BdfKnnQXY09gBMwnEA=';
         this.isSubscribed = false;
         this.swRegistration = null;
+        this.applicationServerPublicKey = 'BG79+VKll7YW6EQLB1V1Yq2qW134m4Dya1ST5TFgeMARbiueUcZ4qU7lnoElfoKSaJ4h8BdfKnnQXY09gBMwnEA=';
         
         this.options = p_options;
 
@@ -29,18 +27,18 @@ export class Buzz
         // set authorization options
         this.options.API_KEY = p_options.API_KEY || "";
         this.options.domainId = p_options.domainId || "";
-        
+                
         // load all necessary setup stuff
         this.setup();
     }
     
     setServer(){
-        console.log("Setting server.");
         // only used during development to change the test server
         if(this.options.development){
             // only used in active development
-            this.server = "http://buzz.goodbytes.local";
-            console.log("Development server set.");
+            this.server = "https://beta.buzzapp.rocks";
+            this.applicationServerPublicKey = "BJr2asjIiAkVgFl0UsiHrA4Gb02JgW9VO/l9zL3eRcX100VPntlacLvpV7ZGNVnbKdjeRu5kS8axzTIM63Ux6zc=";
+            console.log("Development server set to https://beta.buzzapp.rocks.");
         }
         else
         {
@@ -64,7 +62,9 @@ export class Buzz
     }
 
     setRequestHeaders(API_KEY, domainId) {
-        console.log("Setting API key");
+        if( this.options.debug ) {
+            console.log("Setting domain ID to " + domainId);
+        }        
         axios.defaults.headers.common = {
             'X-Requested-With': 'XMLHttpRequest',
             'Authorization' : 'Bearer ' + API_KEY,
@@ -72,8 +72,7 @@ export class Buzz
         };
     }
     
-    // https://developers.google.com/web/fundamentals/getting-started/codelabs/push-notifications/
-    
+
     setup(){
         if( this.options.debug ) {
             console.info("We are initiating setup with the following options: ");
@@ -86,12 +85,18 @@ export class Buzz
         var that = this; // otherwise we will lose our local class scope
         
         if ('serviceWorker' in navigator && 'PushManager' in window) {
-        console.log('Service Worker and Push is supported');
-
-        navigator.serviceWorker.register('/buzz_sw.js')
+        
+            if( that.options.debug ) {
+                console.log('Service Worker and Push is supported');
+            }
+                
+            navigator.serviceWorker.register('/buzz_sw.js')
                 .then(function(swReg) {
-                    console.log('Service Worker is registered', swReg);
-
+                
+                    if( that.options.debug ) {
+                        console.log('Service Worker is registered', swReg);
+                    }
+                        
                     that.swRegistration = swReg;
                     
                     // only create a button when needed
@@ -105,11 +110,18 @@ export class Buzz
                     }    
                 })
                 .catch(function(error) {
-                    console.error('Service Worker Error', error);
+                    if( that.options.debug ) {
+                        console.error('Service Worker Error', error);
+                    }
                 });
         } else {
-            console.warn('Push messaging is not supported');
-            //this.pushButton.textContent = 'Push Not Supported';
+            if( that.options.debug ) {
+                console.warn('Push messaging is not supported');    
+            }       
+            
+            if( that.options.button.enable ){
+                that.pushButton.textContent = 'Push Not Supported';
+            }            
         }
     }
     
@@ -118,7 +130,9 @@ export class Buzz
             console.info("Creating a button for you.");
             
             if( document.querySelector(this.options.button.target) == undefined){
-                console.warn("We can't add a button if you don't set a 'target' element for it. Are you sure the target element was set and exists in your HTML?");
+                if( this.options.debug ) {
+                    console.warn("We can't add a button if you don't set a 'target' element for it. Are you sure the target element was set and exists in your HTML?");
+                }
             }
         }
 
@@ -183,10 +197,14 @@ export class Buzz
                     that.updateSubscriptionOnServer(subscription);
 
                     if (that.isSubscribed) {
-                        console.log('User IS subscribed.');
+                        if( that.options.debug ) {
+                            console.log('User IS subscribed.');
+                        }                        
                     } else {
-                        console.log('User is NOT subscribed.');
-
+                        if( that.options.debug ) {
+                            console.log('User is NOT subscribed.');
+                        }
+                        
                         // when autoSubscribe is enabled, try so subscribe our user
                         if( that.options.autoSubscribe == true ){
                             that.subscribeUser();
@@ -207,12 +225,17 @@ export class Buzz
                     }
                 })
                 .catch(function(error) {
-                    console.log('Error unsubscribing', error);
+                    if( that.options.debug ) {
+                        console.log('Error unsubscribing', error);
+                    }
                 })
                 .then(function() {
                     that.updateSubscriptionOnServer(null);
-
-                    console.log('User is unsubscribed.');
+            
+                    if( that.options.debug ) {
+                        console.log('User is unsubscribed.');
+                    }
+                    
                     that.isSubscribed = false;
 
                     that.updateBtn();
@@ -228,8 +251,11 @@ export class Buzz
                     applicationServerKey: applicationServerKey
                 })
                 .then(function(subscription) {
-                    console.log('User is subscribed:', subscription);
-
+            
+                    if( that.options.debug ) {
+                        console.log('User is subscribed:', subscription);
+                    }
+                        
                     that.updateSubscriptionOnServer(subscription);
 
                     that.isSubscribed = true;
@@ -237,7 +263,10 @@ export class Buzz
                     that.updateBtn();
                 })
                 .catch(function(err) {
-                    console.log('Failed to subscribe the user: ', err);
+                    if( that.options.debug ) {
+                        console.log('Failed to subscribe the user: ', err);
+                    }
+                    
                     that.updateBtn();
                 });
     }
@@ -284,18 +313,18 @@ export class Buzz
             domainId: that.options.domainId
           })
           .then(function (response) {
-            console.log(response);
+            if( that.options.debug ) {
+                console.log("We've synced this user with the app.")   
+            }
           })
           .catch(function (error) {
-            console.log(error);
+              if( that.options.debug ) {
+                  console.log(error);
+              }
           });
             
-            
-            // subscriptionJson.textContent = JSON.stringify(subscription);
-            // subscriptionDetails.classList.remove('is-invisible');
-        } else {
-            // subscriptionDetails.classList.add('is-invisible');
-        }
+
+        } 
     }
     
 
