@@ -1,6 +1,6 @@
 {
   "name": "buzz-goodbytes-js",
-  "version": "1.0.23",
+  "version": "1.0.24",
   "description": "JS client for Web Push Notification app buzz.goodbytes.be",
   "main": "distribution/index.js",
   "scripts": {
