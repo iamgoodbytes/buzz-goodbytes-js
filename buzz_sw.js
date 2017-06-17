@@ -21,7 +21,7 @@ self.addEventListener('push', function(event) {
     const title = jsonData.title;
     const options = {
         body: jsonData.body,
-        icon: jsonData.icon,
+        icon: jsonData.icon || "https://buzzapp.rocks/images/sample_push_icon.png",
         badge: jsonData.icon || "https://buzzapp.rocks/images/sample_push_icon.png",
         tag: 'goodbytes-buzz-push', // this re-uses an existing notification
         actions: (jsonData.actions || []).filter(action => action.title !== 'url')
