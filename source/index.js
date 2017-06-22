@@ -120,7 +120,9 @@ export class Buzz
             }       
             
             if( that.options.button.enable ){
-                that.pushButton.textContent = 'Push Not Supported';
+                if(that.pushButton){
+                    that.pushButton.textContent = 'Push Not Supported';
+                }                
             }            
         }
     }
