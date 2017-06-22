@@ -13,7 +13,10 @@ self.addEventListener('push', function(event) {
 
     var jsonData = event.data.json();
     
-    var customUrlAction = (jsonData.actions || []).filter(action => action.title == 'url');
+    var customUrlAction = (jsonData.actions || []).filter(function (action) {
+        return action.title == 'url';
+    });
+    
     if( customUrlAction.length > 0 ){
         CUSTOM_ACTION_URL = customUrlAction[0].action;
     }
@@ -24,7 +27,9 @@ self.addEventListener('push', function(event) {
         icon: jsonData.icon || "https://buzzapp.rocks/images/sample_push_icon.png",
         badge: jsonData.icon || "https://buzzapp.rocks/images/sample_push_icon.png",
         tag: 'goodbytes-buzz-push', // this re-uses an existing notification
-        actions: (jsonData.actions || []).filter(action => action.title !== 'url')
+        actions: (jsonData.actions || []).filter(function (action) {
+            return action.title !== 'url';
+        })
     };
 
     event.waitUntil(self.registration.showNotification(title, options));
