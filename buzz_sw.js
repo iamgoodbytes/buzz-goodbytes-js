@@ -26,10 +26,11 @@ self.addEventListener('push', function(event) {
         body: jsonData.body,
         icon: jsonData.icon || "https://buzzapp.rocks/images/sample_push_icon.png",
         badge: jsonData.icon || "https://buzzapp.rocks/images/sample_push_icon.png",
-        tag: 'goodbytes-buzz-push', // this re-uses an existing notification
+        tag: 'goodbytes-buzz-push-'+title, // allows us to target the notification if needed
         actions: (jsonData.actions || []).filter(function (action) {
             return action.title !== 'url';
-        })
+        }),
+        renotify: true
     };
 
     event.waitUntil(self.registration.showNotification(title, options));
