@@ -315,7 +315,8 @@ export class Buzz
           axios.post(this.server + '/api/v1/subscriptions/sync', {
             subscription: subscription,
             segments: that.options.segments || "",
-            domainId: that.options.domainId
+            domainId: that.options.domainId,
+            uid: that.options.uid
           })
           .then(function (response) {
             if( that.options.debug ) {
