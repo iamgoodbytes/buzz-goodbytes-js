@@ -21,6 +21,9 @@ export class Buzz
         // ask to subscribe to notifications automatically by default
         this.options.autoSubscribe = p_options.autoSubscribe == false ? false : true;
         
+        // default uid is empty
+        this.options.uid = p_options.uid || "";
+        
         // debug settings 
         this.options.debug = p_options.debug || false;
         
